@@ -1,3 +1,4 @@
+# stage → 단계
 stages:
   - dockerbuild-push
 
