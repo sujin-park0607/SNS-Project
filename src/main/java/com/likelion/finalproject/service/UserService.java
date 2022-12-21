@@ -26,4 +26,15 @@ public class UserService {
                 .password(savedUser.getPassword())
                 .build();
     }
+
+    public String login(String userName, String password) {
+        //userName 확인
+        User user = userRepository.findByUserName(userName)
+                .orElseThrow(()-> new RuntimeException(userName + "이 없습니다"));
+        //password 확인
+        if(!password.equals(user.getPassword())){
+            throw new RuntimeException("password가 일치하지 않습니다");
+        }
+        return "token";
+    }
 }
