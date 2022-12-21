@@ -3,6 +3,8 @@ package com.likelion.finalproject.service;
 import com.likelion.finalproject.domain.User;
 import com.likelion.finalproject.domain.dto.UserJoinRequest;
 import com.likelion.finalproject.domain.dto.UserDto;
+import com.likelion.finalproject.exception.AppException;
+import com.likelion.finalproject.exception.ErrorCode;
 import com.likelion.finalproject.repository.UserRepository;
 import com.likelion.finalproject.utils.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +25,7 @@ public class UserService {
         //userName이 중복인경우
         userRepository.findByUserName(request.getUserName())
                 .ifPresent(user -> {
-                    throw new RuntimeException("중복된 아이디입니다.");
+                    throw new AppException(ErrorCode.DUPLICATED_USER_NAME, request.getUserName()+"은 중복된 아이디입니다.");
                 });
         User savedUser = userRepository.save(request.toEntity(encoder.encode(request.getPassword())));
 
@@ -37,10 +39,10 @@ public class UserService {
     public String login(String userName, String password) {
         //userName 확인
         User user = userRepository.findByUserName(userName)
-                .orElseThrow(()-> new RuntimeException(userName + "이 없습니다"));
+                .orElseThrow(()-> new AppException(ErrorCode.USERNAME_NOT_FOUND, userName+"이 없습니다."));
         //password 확인
-        if(!password.equals(user.getPassword())){
-            throw new RuntimeException("password가 일치하지 않습니다");
+        if(!encoder.matches(password,user.getPassword())){
+            throw new AppException(ErrorCode.INVALID_PASSWORD,"password가 일치하지 않습니다.");
         }
         return JwtTokenUtil.createToken(userName, key, expireTimeMs);
     }
