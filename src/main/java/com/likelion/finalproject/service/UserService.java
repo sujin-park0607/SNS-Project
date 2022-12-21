@@ -7,12 +7,14 @@ import com.likelion.finalproject.repository.UserRepository;
 import com.likelion.finalproject.utils.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final BCryptPasswordEncoder encoder;
     @Value("${jwt.token.secret}")
     private String key;
     private long expireTimeMs = 1000 * 60 * 60;
@@ -23,7 +25,7 @@ public class UserService {
                 .ifPresent(user -> {
                     throw new RuntimeException("중복된 아이디입니다.");
                 });
-        User savedUser = userRepository.save(request.toEntity());
+        User savedUser = userRepository.save(request.toEntity(encoder.encode(request.getPassword())));
 
         return UserDto.builder()
                 .userId(savedUser.getId())
