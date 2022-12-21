@@ -1,10 +1,7 @@
 package com.likelion.finalproject.controller;
 
 import com.likelion.finalproject.domain.Response;
-import com.likelion.finalproject.domain.dto.UserJoinRequest;
-import com.likelion.finalproject.domain.dto.UserDto;
-import com.likelion.finalproject.domain.dto.UserJoinResponse;
-import com.likelion.finalproject.domain.dto.UserLoginRequest;
+import com.likelion.finalproject.domain.dto.*;
 import com.likelion.finalproject.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -26,9 +23,9 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody UserLoginRequest request){
+    public Response<UserLoginResponse> login(@RequestBody UserLoginRequest request){
         String token = userService.login(request.getUserName(), request.getPassword());
-        return ResponseEntity.ok().body(token);
+        return Response.success(new UserLoginResponse(token));
     }
 
 }
