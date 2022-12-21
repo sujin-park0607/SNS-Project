@@ -14,7 +14,7 @@ spring:
     username: root
     password: 1234
 
-#jwt:
-#  token:
-#    secret: hello
+jwt:
+  token:
+    secret: hello
 
