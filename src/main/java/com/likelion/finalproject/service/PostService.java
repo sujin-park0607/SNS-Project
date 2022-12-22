@@ -4,7 +4,6 @@ import com.likelion.finalproject.domain.Post;
 import com.likelion.finalproject.domain.User;
 import com.likelion.finalproject.domain.dto.PostAddRequest;
 import com.likelion.finalproject.domain.dto.PostAddResponse;
-import com.likelion.finalproject.domain.dto.PostGetListResponse;
 import com.likelion.finalproject.domain.dto.PostGetResponse;
 import com.likelion.finalproject.exception.AppException;
 import com.likelion.finalproject.exception.ErrorCode;
@@ -52,5 +51,17 @@ public class PostService {
     public PostGetResponse getPost(Long id) {
         Post post = postRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.POST_NOT_FOUND, "해당 게시물이 없습니다"));
         return PostGetResponse.fromEntity(post);
+    }
+
+    public void delete(Long id, String userName) {
+        //사용자가 존재하지 않을경우
+        userRepository.findByUserName(userName)
+                .orElseThrow(() -> new AppException(ErrorCode.USERNAME_NOT_FOUND, userName + "가 없습니다."));
+
+        //post가 존재하지 않을 경우
+        Post post = postRepository.findById(id)
+                .orElseThrow(()-> new AppException(ErrorCode.POST_NOT_FOUND, "포스트가 존재하지 않습니다."));
+
+        postRepository.delete(post);
     }
 }

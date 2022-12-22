@@ -29,6 +29,8 @@ public class SecurityConfig {
                 .antMatchers("/api/v1/users/join", "/api/v1/users/login").permitAll() // join, login은 언제나 가능
                 .antMatchers(HttpMethod.GET,"/api/v1/**").permitAll()
                 .antMatchers(HttpMethod.POST,"/api/v1/**").authenticated()
+                .antMatchers(HttpMethod.DELETE,"/api/v1/**").authenticated()
+                .antMatchers(HttpMethod.PUT,"/api/v1/**").authenticated()
                 .and()
                 .sessionManagement()// 세션관리구성
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // jwt사용하는 경우 씀, 스프링 시큐리티는 HttpSession을 생성하지 않고, SecurityContext를 얻기 위해 사용하지 않는다

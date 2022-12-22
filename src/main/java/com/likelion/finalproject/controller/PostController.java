@@ -3,7 +3,7 @@ package com.likelion.finalproject.controller;
 import com.likelion.finalproject.domain.Response;
 import com.likelion.finalproject.domain.dto.PostAddRequest;
 import com.likelion.finalproject.domain.dto.PostAddResponse;
-import com.likelion.finalproject.domain.dto.PostGetListResponse;
+import com.likelion.finalproject.domain.dto.PostDeleteResponse;
 import com.likelion.finalproject.domain.dto.PostGetResponse;
 import com.likelion.finalproject.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +27,6 @@ public class PostController {
     @PostMapping
     public Response write(@RequestBody PostAddRequest request, Authentication authentication){
         String userName = authentication.getName();
-        log.info("controlleruserName: {}",userName);
         PostAddResponse response = postService.add(request, userName);
         return Response.success(response);
     }
@@ -49,6 +48,16 @@ public class PostController {
     public Response<PostGetResponse> get(@PathVariable Long id){
         PostGetResponse postGetResponse = postService.getPost(id);
         return Response.success(postGetResponse);
+    }
+
+    /**
+     * 게시물 삭제
+     */
+    @DeleteMapping("/{id}")
+    public Response<PostDeleteResponse> delete(@PathVariable Long id, Authentication authentication){
+        String userName = authentication.getName();
+        postService.delete(id, userName);
+        return Response.success(new PostDeleteResponse("포스트 삭제 완료", id));
     }
 
 }
