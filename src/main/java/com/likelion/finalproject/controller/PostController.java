@@ -30,8 +30,8 @@ public class PostController {
 
     @GetMapping
     public Response<PostGetListResponse> list(Pageable pageable){
-        List<PostGetResponse> postGetRespons = postService.getAllPost(pageable);
-        return Response.success(new PostGetListResponse(postGetRespons, pageable));
+        PostGetListResponse postGetRespons = postService.getAllPost(pageable);
+        return Response.success(postGetRespons);
     }
 
     @GetMapping("/{id}")

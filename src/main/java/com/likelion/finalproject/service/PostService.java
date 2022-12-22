@@ -4,6 +4,7 @@ import com.likelion.finalproject.domain.Post;
 import com.likelion.finalproject.domain.User;
 import com.likelion.finalproject.domain.dto.PostAddRequest;
 import com.likelion.finalproject.domain.dto.PostAddResponse;
+import com.likelion.finalproject.domain.dto.PostGetListResponse;
 import com.likelion.finalproject.domain.dto.PostGetResponse;
 import com.likelion.finalproject.exception.AppException;
 import com.likelion.finalproject.exception.ErrorCode;
@@ -41,11 +42,11 @@ public class PostService {
         return new PostAddResponse(user.getId(), userName);
     }
 
-    public List<PostGetResponse> getAllPost(Pageable pageable) {
+    public PostGetListResponse getAllPost(Pageable pageable) {
         Page<Post> posts = postRepository.findAll(pageable);
         List<PostGetResponse> postGetRespons = posts.stream()
                 .map(post -> PostGetResponse.fromEntity(post)).collect(Collectors.toList());
-        return postGetRespons;
+        return new PostGetListResponse(postGetRespons, pageable);
     }
 
     public PostGetResponse getPost(Long id) {
