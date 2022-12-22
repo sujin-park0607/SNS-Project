@@ -42,11 +42,11 @@ public class PostService {
         return new PostAddResponse(user.getId(), userName);
     }
 
-    public PostGetListResponse getAllPost(Pageable pageable) {
+    public List<PostGetResponse> getAllPost(Pageable pageable) {
         Page<Post> posts = postRepository.findAll(pageable);
         List<PostGetResponse> postGetRespons = posts.stream()
                 .map(post -> PostGetResponse.fromEntity(post)).collect(Collectors.toList());
-        return new PostGetListResponse(postGetRespons, pageable);
+        return postGetRespons;
     }
 
     public PostGetResponse getPost(Long id) {
