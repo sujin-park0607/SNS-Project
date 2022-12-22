@@ -5,10 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Builder
@@ -20,8 +17,18 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "user_name")
     private String userName;
     private String password;
-//    private Timestamp updatedAt;
+
+    @Column(name = "registered_at")
+    private Timestamp registeredAt;
+
+    @Column(name = "removed_at")
+    private Timestamp removedAt;
+
+    @Column(name = "updated_at")
+    private Timestamp updatedAt;
 
 }

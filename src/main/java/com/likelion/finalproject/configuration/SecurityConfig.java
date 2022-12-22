@@ -27,6 +27,7 @@ public class SecurityConfig {
                 .authorizeRequests() //사용권장
                 // 경로지정 맵핑
                 .antMatchers("/api/v1/users/join", "/api/v1/users/login").permitAll() // join, login은 언제나 가능
+                .antMatchers(HttpMethod.GET,"/api/v1/**").permitAll()
                 .antMatchers(HttpMethod.POST,"/api/v1/**").authenticated()
                 .and()
                 .sessionManagement()// 세션관리구성

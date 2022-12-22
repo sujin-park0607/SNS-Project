@@ -1,11 +1,10 @@
 package com.likelion.finalproject.domain;
 
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
@@ -19,8 +18,16 @@ public class Post {
     private Long id;
     private String title;
     private String body;
-    private Timestamp registeredAt;
-    private Timestamp updatedAt;
-    private Timestamp deletedAt;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @CreationTimestamp
+    @Column(name = "create_at")
+    private Timestamp createAt;
+
+    @UpdateTimestamp
+    @Column(name = "last_modified_at")
+    private Timestamp lastModifiedAt;
 
 }
