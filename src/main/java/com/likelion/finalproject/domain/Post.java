@@ -1,18 +1,25 @@
 package com.likelion.finalproject.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Entity
 @Builder
 @Getter
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class Post {
+@EntityListeners(AuditingEntityListener.class)
+public class Post{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,12 +29,14 @@ public class Post {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @CreationTimestamp
-    @Column(name = "create_at")
-    private Timestamp createAt;
 
-    @UpdateTimestamp
+    @Column(name = "create_at")
+    @CreatedDate
+    private LocalDateTime createAt;
+
+
     @Column(name = "last_modified_at")
-    private Timestamp lastModifiedAt;
+    @LastModifiedDate
+    private LocalDateTime lastModifiedAt;
 
 }

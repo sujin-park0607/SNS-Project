@@ -1,11 +1,13 @@
 package com.likelion.finalproject.domain.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.likelion.finalproject.domain.Post;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Builder
 @Getter
@@ -15,7 +17,12 @@ public class PostGetResponse {
     private String title;
     private String body;
     private String userName;
-    private Timestamp createdAt;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
+    private LocalDateTime createdAt;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
+    private LocalDateTime lastModifiedAt;
 
     public static PostGetResponse fromEntity(Post post) {
         return PostGetResponse.builder()
@@ -24,6 +31,7 @@ public class PostGetResponse {
                 .body(post.getBody())
                 .userName(post.getUser().getUserName())
                 .createdAt(post.getCreateAt())
+                .lastModifiedAt(post.getLastModifiedAt())
                 .build();
     }
 }

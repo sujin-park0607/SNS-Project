@@ -4,15 +4,20 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Builder
 @Entity
 @Getter
 @AllArgsConstructor
 @RequiredArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,13 +27,15 @@ public class User {
     private String userName;
     private String password;
 
-    @Column(name = "registered_at")
-    private Timestamp registeredAt;
+    @Column(name = "registered_at", updatable = false)
+    @CreatedDate
+    private LocalDateTime registeredAt;
 
     @Column(name = "removed_at")
-    private Timestamp removedAt;
+    private LocalDateTime removedAt;
 
     @Column(name = "updated_at")
-    private Timestamp updatedAt;
+    @LastModifiedDate
+    private LocalDateTime updatedAt;
 
 }
