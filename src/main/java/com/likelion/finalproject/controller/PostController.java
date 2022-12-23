@@ -25,7 +25,7 @@ public class PostController {
      * 게시물 등록
      */
     @PostMapping
-    public Response write(@RequestBody PostAddRequest request, Authentication authentication){
+    public Response<PostAddResponse> write(@RequestBody PostAddRequest request, Authentication authentication){
         String userName = authentication.getName();
         PostAddResponse response = postService.add(request, userName);
         return Response.success(response);

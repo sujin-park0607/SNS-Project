@@ -1,6 +1,7 @@
 package com.likelion.finalproject.service;
 
 import com.likelion.finalproject.domain.Post;
+import com.likelion.finalproject.domain.Response;
 import com.likelion.finalproject.domain.User;
 import com.likelion.finalproject.domain.dto.PostAddRequest;
 import com.likelion.finalproject.domain.dto.PostAddResponse;
@@ -36,9 +37,9 @@ public class PostService {
                 .title(request.getTitle())
                 .body(request.getBody())
                 .build();
-        postRepository.save(post);
+        Post savedPost = postRepository.save(post);
 
-        return new PostAddResponse(user.getId(), userName);
+        return new PostAddResponse("포스트 등록 완료", savedPost.getId());
     }
 
     public List<PostGetResponse> getAllPost(Pageable pageable) {
