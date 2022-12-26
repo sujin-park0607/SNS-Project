@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 @SpringBootApplication
 public class FinalProjectApplication {
 
-    public static void main(String[] args)https://github.com/sujin-park0607/hello-new-year.git {
+    public static void main(String[] args){
         SpringApplication.run(FinalProjectApplication.class, args);
     }
 
