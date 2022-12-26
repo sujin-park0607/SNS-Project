@@ -65,4 +65,12 @@ public class PostService {
 
         postRepository.delete(post);
     }
+
+    public void modify(Long id, String userName) {
+        postRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.POST_NOT_FOUND, "해당 게시물이 없습니다"));
+
+        Post post = postRepository.getOne(id);
+
+    }
 }

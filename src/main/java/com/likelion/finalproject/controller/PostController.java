@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
+
 @RestController
 @RequestMapping("/api/v1/posts")
 @RequiredArgsConstructor
@@ -58,6 +60,16 @@ public class PostController {
         String userName = authentication.getName();
         postService.delete(id, userName);
         return Response.success(new PostDeleteResponse("포스트 삭제 완료", id));
+    }
+
+    /**
+     * 게시물 수정
+     */
+    @PutMapping("/{id}")
+    public Response<PostDeleteResponse> modify(@PathVariable Long id, Authentication authentication){
+        String userName = authentication.getName();
+        postService.modify(id, userName);
+        return Response.success(new PostDeleteResponse("포스트 수정 완료", id));
     }
 
 }
