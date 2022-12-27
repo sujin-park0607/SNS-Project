@@ -1,6 +1,5 @@
 # SNS 만들기
 
----
 
 
 ### ERD - 데이터베이스
@@ -9,10 +8,14 @@
 <br>
 <br>
 
+---
+
 ### Architecture - 아키텍처
 ![image](/uploads/9986fcccd9de094a5f8a771757d327d0/image.png)
 <br>
 <br>
+
+---
 
 ### Technical Stec - 기술 스택
 <img src="https://img.shields.io/badge/Springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white">
@@ -23,6 +26,8 @@
 <img src="https://img.shields.io/badge/gitLab-FC6D26?style=for-the-badge&logo=gitLab&logoColor=white">
 <br>
 <br>
+
+---
 
 ### Check List - 체크 리스트
 - [x] gitLab CI / CD 자동화
@@ -39,6 +44,8 @@
 <br>
 <br>
 
+---
+
 ### End Point - 엔드 포인트
 | Http   | URL                                | 설명     |
 |--------|------------------------------------|--------|
@@ -52,6 +59,8 @@
 | POST   | /api/v1/users/{userId}/role/change | 권한 승격  |
 <br>
 <br>
+
+---
 
 ### 결과물
 http://ec2-13-125-151-215.ap-northeast-2.compute.amazonaws.com:8080/swagger-ui/index.html
