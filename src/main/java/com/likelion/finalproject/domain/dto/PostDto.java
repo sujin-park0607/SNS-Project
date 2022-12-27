@@ -11,14 +11,12 @@ import lombok.Getter;
 @AllArgsConstructor
 public class PostDto {
     private Long id;
-    private User user;
     private String title;
     private String body;
 
     public static PostDto toEntity(Post savedPost) {
         return PostDto.builder()
                 .id(savedPost.getId())
-                .user(savedPost.getUser())
                 .title(savedPost.getTitle())
                 .body(savedPost.getBody())
                 .build();

@@ -1,6 +1,6 @@
 package com.likelion.finalproject.controller;
 
-import com.likelion.finalproject.domain.entity.Response;
+import com.likelion.finalproject.domain.dto.Response;
 import com.likelion.finalproject.domain.dto.*;
 import com.likelion.finalproject.service.UserService;
 import lombok.RequiredArgsConstructor;

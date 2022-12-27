@@ -1,11 +1,8 @@
 package com.likelion.finalproject.service;
 
-import com.likelion.finalproject.domain.dto.PostDto;
+import com.likelion.finalproject.domain.dto.*;
 import com.likelion.finalproject.domain.entity.Post;
 import com.likelion.finalproject.domain.entity.User;
-import com.likelion.finalproject.domain.dto.PostAddRequest;
-import com.likelion.finalproject.domain.dto.PostAddResponse;
-import com.likelion.finalproject.domain.dto.PostGetResponse;
 import com.likelion.finalproject.exception.AppException;
 import com.likelion.finalproject.exception.ErrorCode;
 import com.likelion.finalproject.repository.PostRepository;
@@ -27,7 +24,7 @@ public class PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
 
-    public PostDto add(PostAddRequest request, String userName) {
+    public PostDto add(PostRequest request, String userName) {
         //user가 존재하지 않을 때
         User user = userRepository.findByUserName(userName)
                 .orElseThrow(() -> new AppException(ErrorCode.USERNAME_NOT_FOUND, userName + "가 없습니다."));
@@ -54,7 +51,7 @@ public class PostService {
         return PostGetResponse.fromEntity(post);
     }
 
-    public void delete(Long id, String userName) {
+    public PostDeleteResponse delete(Long id, String userName) {
         //사용자가 존재하지 않을경우
         userRepository.findByUserName(userName)
                 .orElseThrow(() -> new AppException(ErrorCode.USERNAME_NOT_FOUND, userName + "가 없습니다."));
@@ -69,13 +66,24 @@ public class PostService {
         }
 
         postRepository.delete(post);
+        return new PostDeleteResponse("포스트 삭제 완료", post.getId());
     }
 
-    public void modify(Long id, String userName) {
-        postRepository.findById(id)
+    public PostUpdateResponse update(Long id, PostRequest request, String userName) {
+        //post가 존재하지 않을 경우
+        Post post = postRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.POST_NOT_FOUND, "해당 게시물이 없습니다"));
 
-        Post post = postRepository.getOne(id);
+        //사용자가 존재하지 않을경우
+        userRepository.findByUserName(userName)
+                .orElseThrow(() -> new AppException(ErrorCode.USERNAME_NOT_FOUND, userName + "가 없습니다."));
 
+        //작성자 불일치
+        if(!post.getUser().getUserName().equals(userName)){
+            throw new AppException(ErrorCode.INVALID_PERMISSION,"권한이 없습니다.");
+        }
+
+        post.update(request.getTitle(), request.getBody());
+        return new PostUpdateResponse("포스트 수정 완료", postRepository.save(post).getId());
     }
 }

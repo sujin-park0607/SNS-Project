@@ -1,7 +1,7 @@
 package com.likelion.finalproject.controller;
 
 import com.likelion.finalproject.domain.dto.*;
-import com.likelion.finalproject.domain.entity.Response;
+import com.likelion.finalproject.domain.dto.Response;
 import com.likelion.finalproject.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +22,7 @@ public class PostController {
      * 게시물 등록
      */
     @PostMapping
-    public Response<PostAddResponse> write(@RequestBody PostAddRequest request, Authentication authentication){
+    public Response<PostAddResponse> write(@RequestBody PostRequest request, Authentication authentication){
         String userName = authentication.getName();
         PostDto dto = postService.add(request, userName);
         return Response.success(new PostAddResponse("포스트 등록 완료", dto.getId()));
@@ -53,18 +53,18 @@ public class PostController {
     @DeleteMapping("/{id}")
     public Response<PostDeleteResponse> delete(@PathVariable Long id, Authentication authentication){
         String userName = authentication.getName();
-        postService.delete(id, userName);
-        return Response.success(new PostDeleteResponse("포스트 삭제 완료", id));
+        PostDeleteResponse response = postService.delete(id, userName);
+        return Response.success(response);
     }
 
     /**
      * 게시물 수정
      */
     @PutMapping("/{id}")
-    public Response<PostDeleteResponse> modify(@PathVariable Long id, Authentication authentication){
+    public Response<PostUpdateResponse> update(@PathVariable Long id, @RequestBody PostRequest request, Authentication authentication){
         String userName = authentication.getName();
-        postService.modify(id, userName);
-        return Response.success(new PostDeleteResponse("포스트 수정 완료", id));
+        PostUpdateResponse response = postService.update(id, request, userName);
+        return Response.success(response);
     }
 
 }
