@@ -4,12 +4,13 @@
 
 
 ### ERD - 데이터베이스
+![image](/uploads/32a5a229a6402d623ed3e8e1a34b0e10/image.png)
 
 <br>
 <br>
 
 ### Architecture - 아키텍처
-
+![image](/uploads/9986fcccd9de094a5f8a771757d327d0/image.png)
 <br>
 <br>
 
