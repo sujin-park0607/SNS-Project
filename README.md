@@ -65,6 +65,11 @@
 ## Swagger
 http://ec2-13-125-151-215.ap-northeast-2.compute.amazonaws.com:8080/swagger-ui/index.html
 
+<br>
+<br>
+
+---
+
 ## 1주차 미션 요약
 [접근 방법]
 - 처음에 User과 Security에 대한 코드는 수업 로그와 유튜브를 기반으로 복습하는 형태로 구현했다.
