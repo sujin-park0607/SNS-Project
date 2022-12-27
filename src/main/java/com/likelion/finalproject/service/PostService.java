@@ -1,8 +1,8 @@
 package com.likelion.finalproject.service;
 
-import com.likelion.finalproject.domain.Post;
-import com.likelion.finalproject.domain.Response;
-import com.likelion.finalproject.domain.User;
+import com.likelion.finalproject.domain.dto.PostDto;
+import com.likelion.finalproject.domain.entity.Post;
+import com.likelion.finalproject.domain.entity.User;
 import com.likelion.finalproject.domain.dto.PostAddRequest;
 import com.likelion.finalproject.domain.dto.PostAddResponse;
 import com.likelion.finalproject.domain.dto.PostGetResponse;
@@ -27,7 +27,7 @@ public class PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
 
-    public PostAddResponse add(PostAddRequest request, String userName) {
+    public PostDto add(PostAddRequest request, String userName) {
         //user가 존재하지 않을 때
         User user = userRepository.findByUserName(userName)
                 .orElseThrow(() -> new AppException(ErrorCode.USERNAME_NOT_FOUND, userName + "가 없습니다."));
@@ -39,7 +39,7 @@ public class PostService {
                 .build();
         Post savedPost = postRepository.save(post);
 
-        return new PostAddResponse("포스트 등록 완료", savedPost.getId());
+        return PostDto.toEntity(savedPost);
     }
 
     public List<PostGetResponse> getAllPost(Pageable pageable) {
@@ -62,6 +62,11 @@ public class PostService {
         //post가 존재하지 않을 경우
         Post post = postRepository.findById(id)
                 .orElseThrow(()-> new AppException(ErrorCode.POST_NOT_FOUND, "포스트가 존재하지 않습니다."));
+
+        //작성자 불일치
+        if(!post.getUser().getUserName().equals(userName)){
+            throw new AppException(ErrorCode.INVALID_PERMISSION,"권한이 없습니다.");
+        }
 
         postRepository.delete(post);
     }

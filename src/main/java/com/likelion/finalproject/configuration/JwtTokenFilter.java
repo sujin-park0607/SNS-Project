@@ -1,6 +1,7 @@
 package com.likelion.finalproject.configuration;
 
-import com.likelion.finalproject.domain.User;
+import com.likelion.finalproject.domain.entity.User;
+import com.likelion.finalproject.exception.ErrorCode;
 import com.likelion.finalproject.service.UserService;
 import com.likelion.finalproject.utils.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
@@ -36,8 +37,16 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         final String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
         log.info("authorizationHeader:{}",authorizationHeader);
 
-        if(authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")){
-            log.error("헤더가 null이거나 잘못되었습니다.");
+        if(authorizationHeader == null){
+            log.info("not exist token");
+            request.setAttribute("exception",ErrorCode.INVALID_PERMISSION.name());
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        if(!authorizationHeader.startsWith("Bearer ")){
+            log.info("not exist Bearer");
+            request.setAttribute("exception", ErrorCode.INVALID_TOKEN.name());
             filterChain.doFilter(request, response);
             return;
         }
@@ -46,30 +55,30 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         //token분리
         try{
             token = authorizationHeader.split(" ")[1];
-        }catch(Exception e){
-            log.error("token 추출 실패");
-            filterChain.doFilter(request,response);
-            return;
-        }
 
-        //token만료 체크
-        if(JwtTokenUtil.isExpired(token, secretKey)){
+            //token만료 체크
+            if(JwtTokenUtil.isExpired(token, secretKey)){
+                request.setAttribute("exception",ErrorCode.INVALID_TOKEN.name());
+                filterChain.doFilter(request,response);
+                return;
+            };
+
+            //userName 꺼내기
+            String userName = JwtTokenUtil.getUserName(token, secretKey);
+            log.info("userName:{}", userName);
+            //userDetail가져오기
+            User user = userService.getUserByUserName(userName);
+
+            //권한여부경정
+            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userName, null, List.of(new SimpleGrantedAuthority("USER")));
+            authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             filterChain.doFilter(request, response);
-            return;
-        };
 
-        //userName 꺼내기
-        String userName = JwtTokenUtil.getUserName(token, secretKey);
-        log.info("userName:{}", userName);
-
-        //userDetail가져오기
-        User user = userService.getUserByUserName(userName);
-
-        //권한여부경정
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userName, null, List.of(new SimpleGrantedAuthority("USER")));
-        authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-        filterChain.doFilter(request, response);
+        }catch(Exception e){
+            request.setAttribute("exception",ErrorCode.INVALID_TOKEN.name());
+            filterChain.doFilter(request,response);
+        }
 
     }
 }

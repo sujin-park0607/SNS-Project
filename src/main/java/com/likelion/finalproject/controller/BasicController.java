@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1")
 public class BasicController {
 
-    @GetMapping("/happy_new_year")
+    @GetMapping("/hello")
     public String hello(){
-        return "happy_new_year";
+        return "박수진";
     }
 }

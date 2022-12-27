@@ -1,10 +1,9 @@
 package com.likelion.finalproject.controller;
 
-import com.likelion.finalproject.domain.Response;
+import com.likelion.finalproject.domain.entity.Response;
 import com.likelion.finalproject.domain.dto.*;
 import com.likelion.finalproject.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

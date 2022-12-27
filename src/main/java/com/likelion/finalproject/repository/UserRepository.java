@@ -1,7 +1,7 @@
 package com.likelion.finalproject.repository;
 
 
-import com.likelion.finalproject.domain.User;
+import com.likelion.finalproject.domain.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

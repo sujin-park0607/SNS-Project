@@ -1,10 +1,7 @@
 package com.likelion.finalproject.controller;
 
-import com.likelion.finalproject.domain.Response;
-import com.likelion.finalproject.domain.dto.PostAddRequest;
-import com.likelion.finalproject.domain.dto.PostAddResponse;
-import com.likelion.finalproject.domain.dto.PostDeleteResponse;
-import com.likelion.finalproject.domain.dto.PostGetResponse;
+import com.likelion.finalproject.domain.dto.*;
+import com.likelion.finalproject.domain.entity.Response;
 import com.likelion.finalproject.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,8 +10,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
-import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 
 @RestController
 @RequestMapping("/api/v1/posts")
@@ -29,8 +24,8 @@ public class PostController {
     @PostMapping
     public Response<PostAddResponse> write(@RequestBody PostAddRequest request, Authentication authentication){
         String userName = authentication.getName();
-        PostAddResponse response = postService.add(request, userName);
-        return Response.success(response);
+        PostDto dto = postService.add(request, userName);
+        return Response.success(new PostAddResponse("포스트 등록 완료", dto.getId()));
     }
 
     /**

@@ -1,6 +1,6 @@
 package com.likelion.finalproject.service;
 
-import com.likelion.finalproject.domain.User;
+import com.likelion.finalproject.domain.entity.User;
 import com.likelion.finalproject.domain.dto.UserJoinRequest;
 import com.likelion.finalproject.domain.dto.UserDto;
 import com.likelion.finalproject.exception.AppException;

@@ -1,6 +1,7 @@
 package com.likelion.finalproject.exception;
 
-import com.likelion.finalproject.domain.Response;
+import com.likelion.finalproject.domain.dto.ErrorDto;
+import com.likelion.finalproject.domain.entity.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;

@@ -1,6 +1,6 @@
 package com.likelion.finalproject.domain.dto;
 
-import com.likelion.finalproject.domain.User;
+import com.likelion.finalproject.domain.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

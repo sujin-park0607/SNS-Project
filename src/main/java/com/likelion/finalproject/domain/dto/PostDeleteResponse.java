@@ -7,5 +7,5 @@ import lombok.Getter;
 @AllArgsConstructor
 public class PostDeleteResponse {
     private String message;
-    private long id;
+    private long postId;
 }
