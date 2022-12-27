@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1")
 public class BasicController {
 
-    @GetMapping(value = "/api/v1/hello", produces = "application/json; charset=utf8")
+    @GetMapping(value = "/hello", produces = "application/json; charset=utf8")
     public String hello() {
         return "박수진";
     }
