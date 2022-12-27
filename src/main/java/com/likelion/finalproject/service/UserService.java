@@ -1,19 +1,24 @@
 package com.likelion.finalproject.service;
 
+import com.likelion.finalproject.domain.dto.UserRoleRequest;
+import com.likelion.finalproject.domain.dto.UserRoleResponse;
 import com.likelion.finalproject.domain.entity.User;
 import com.likelion.finalproject.domain.dto.UserJoinRequest;
 import com.likelion.finalproject.domain.dto.UserDto;
+import com.likelion.finalproject.enums.UserRole;
 import com.likelion.finalproject.exception.AppException;
 import com.likelion.finalproject.exception.ErrorCode;
 import com.likelion.finalproject.repository.UserRepository;
 import com.likelion.finalproject.utils.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder encoder;
@@ -50,5 +55,31 @@ public class UserService {
     public User getUserByUserName(String userName) {
         return userRepository.findByUserName(userName)
                 .orElseThrow(() -> new AppException(ErrorCode.USERNAME_NOT_FOUND,""));
+    }
+
+    public UserRoleResponse changeRole(Long id, UserRoleRequest request, String userName) {
+
+        //userName 확인
+        User user = userRepository.findByUserName(userName)
+                .orElseThrow(()-> new AppException(ErrorCode.USERNAME_NOT_FOUND, "존재하지 않는 회원입니다."));
+        //admin 확인
+        if(user.getRole() != UserRole.ADMIN){
+            throw new AppException(ErrorCode.INVALID_PERMISSION,"권한이 없습니다.");
+        }
+        //변경할 user존재 확인
+        User changeUser = userRepository.findById(id)
+                .orElseThrow(()-> new AppException(ErrorCode.USERNAME_NOT_FOUND, "존재하지 않는 회원입니다."));
+        //변경
+        if(request.getRole().equals(UserRole.ADMIN.name())){
+            changeUser.update(UserRole.ADMIN);
+        }else if (request.getRole().equals(UserRole.USER.name())){
+            changeUser.update(UserRole.USER);
+        }else{
+            throw new AppException(ErrorCode.ROLE_NOT_FOUND,"해당 역할이 없습니다.");
+        }
+        log.info("changeing:{}",request.getRole());
+        log.info("changed:{}",changeUser.getRole().name());
+
+        return new UserRoleResponse("권한 수정 완료", userRepository.save(changeUser).getId());
     }
 }

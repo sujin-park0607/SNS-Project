@@ -4,10 +4,8 @@ import com.likelion.finalproject.domain.dto.Response;
 import com.likelion.finalproject.domain.dto.*;
 import com.likelion.finalproject.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -25,6 +23,13 @@ public class UserController {
     public Response<UserLoginResponse> login(@RequestBody UserLoginRequest request){
         String token = userService.login(request.getUserName(), request.getPassword());
         return Response.success(new UserLoginResponse(token));
+    }
+
+    @PostMapping("/{id}/role/change")
+    public Response<UserRoleResponse> changeRole(@PathVariable Long id, @RequestBody UserRoleRequest request, Authentication authentication){
+        String userName = authentication.getName();
+        UserRoleResponse response = userService.changeRole(id, request, userName);
+        return Response.success(response);
     }
 
 }

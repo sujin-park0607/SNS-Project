@@ -34,9 +34,10 @@ public class Post{
     @LastModifiedDate
     private LocalDateTime lastModifiedAt;
 
-    public void update(String title, String body){
+    public void update(String title, String body, User user){
         this.title = title;
         this.body = body;
+        this.user = user;
         this.lastModifiedAt = LocalDateTime.now();
     }
 

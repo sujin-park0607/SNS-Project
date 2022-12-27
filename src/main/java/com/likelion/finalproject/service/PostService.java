@@ -3,6 +3,7 @@ package com.likelion.finalproject.service;
 import com.likelion.finalproject.domain.dto.*;
 import com.likelion.finalproject.domain.entity.Post;
 import com.likelion.finalproject.domain.entity.User;
+import com.likelion.finalproject.enums.UserRole;
 import com.likelion.finalproject.exception.AppException;
 import com.likelion.finalproject.exception.ErrorCode;
 import com.likelion.finalproject.repository.PostRepository;
@@ -53,15 +54,15 @@ public class PostService {
 
     public PostDeleteResponse delete(Long id, String userName) {
         //사용자가 존재하지 않을경우
-        userRepository.findByUserName(userName)
+        User user = userRepository.findByUserName(userName)
                 .orElseThrow(() -> new AppException(ErrorCode.USERNAME_NOT_FOUND, userName + "가 없습니다."));
 
         //post가 존재하지 않을 경우
         Post post = postRepository.findById(id)
                 .orElseThrow(()-> new AppException(ErrorCode.POST_NOT_FOUND, "포스트가 존재하지 않습니다."));
 
-        //작성자 불일치
-        if(!post.getUser().getUserName().equals(userName)){
+        //User이며 작성자가 불일치할 경우
+        if(user.getRole() == UserRole.USER && !post.getUser().getUserName().equals(userName)){
             throw new AppException(ErrorCode.INVALID_PERMISSION,"권한이 없습니다.");
         }
 
@@ -75,15 +76,15 @@ public class PostService {
                 .orElseThrow(() -> new AppException(ErrorCode.POST_NOT_FOUND, "해당 게시물이 없습니다"));
 
         //사용자가 존재하지 않을경우
-        userRepository.findByUserName(userName)
+        User user = userRepository.findByUserName(userName)
                 .orElseThrow(() -> new AppException(ErrorCode.USERNAME_NOT_FOUND, userName + "가 없습니다."));
 
-        //작성자 불일치
-        if(!post.getUser().getUserName().equals(userName)){
+        //작성자 불일치, admin 허용
+        if(user.getRole() == UserRole.USER && !post.getUser().getUserName().equals(userName)){
             throw new AppException(ErrorCode.INVALID_PERMISSION,"권한이 없습니다.");
         }
 
-        post.update(request.getTitle(), request.getBody());
+        post.update(request.getTitle(), request.getBody(), user);
         return new PostUpdateResponse("포스트 수정 완료", postRepository.save(post).getId());
     }
 }

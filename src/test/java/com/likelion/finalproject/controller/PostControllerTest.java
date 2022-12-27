@@ -7,13 +7,17 @@ import com.likelion.finalproject.exception.AppException;
 import com.likelion.finalproject.exception.ErrorCode;
 import com.likelion.finalproject.service.PostService;
 import com.likelion.finalproject.utils.JwtTokenUtil;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -21,9 +25,15 @@ import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.awt.print.Pageable;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.data.domain.Sort.Direction.DESC;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -79,6 +89,28 @@ class PostControllerTest {
                 .andExpect(jsonPath("$.result.userName").exists())
                 .andDo(print());
     }
+
+    @Test
+    @DisplayName("포스트 전체 조회 성공")
+    @WithMockUser
+    void postList_success() throws Exception {
+
+        String url = "/api/v1/posts";
+
+        mockMvc.perform(get(url)
+                        .param("sort", "id,desc")
+                        .with(csrf()))
+                .andExpect(status().isOk())
+                .andDo(print());
+
+        ArgumentCaptor<Pageable> pageableCaptor = ArgumentCaptor.forClass(Pageable.class);
+        verify(postService).getAllPost((org.springframework.data.domain.Pageable) pageableCaptor.capture());
+        PageRequest pageable = (PageRequest) pageableCaptor.getValue();
+
+        assertEquals(Sort.by(DESC, "id"), pageable.getSort());
+    }
+
+
 
     @Test
     @DisplayName("포스트 작성 성공")
