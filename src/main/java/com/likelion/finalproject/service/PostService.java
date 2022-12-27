@@ -36,6 +36,8 @@ public class PostService {
                 .body(request.getBody())
                 .build();
         Post savedPost = postRepository.save(post);
+        log.info("title:{}",savedPost.getTitle());
+        log.info("body:{}",savedPost.getTitle());
 
         return PostDto.toEntity(savedPost);
     }
