@@ -1,7 +1,7 @@
 package com.likelion.finalproject.controller;
 
 import com.likelion.finalproject.domain.dto.Response;
-import com.likelion.finalproject.domain.dto.*;
+import com.likelion.finalproject.domain.dto.user.*;
 import com.likelion.finalproject.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;

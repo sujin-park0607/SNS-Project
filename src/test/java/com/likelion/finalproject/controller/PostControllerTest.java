@@ -1,13 +1,12 @@
 package com.likelion.finalproject.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.likelion.finalproject.domain.dto.*;
+import com.likelion.finalproject.domain.dto.post.*;
 import com.likelion.finalproject.domain.entity.Post;
 import com.likelion.finalproject.exception.AppException;
 import com.likelion.finalproject.exception.ErrorCode;
 import com.likelion.finalproject.service.PostService;
 import com.likelion.finalproject.utils.JwtTokenUtil;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -32,7 +31,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import static org.springframework.data.domain.Sort.Direction.DESC;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;

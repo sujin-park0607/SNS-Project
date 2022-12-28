@@ -1,9 +1,9 @@
 package com.likelion.finalproject.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.likelion.finalproject.domain.dto.UserDto;
-import com.likelion.finalproject.domain.dto.UserJoinRequest;
-import com.likelion.finalproject.domain.dto.UserLoginRequest;
+import com.likelion.finalproject.domain.dto.user.UserDto;
+import com.likelion.finalproject.domain.dto.user.UserJoinRequest;
+import com.likelion.finalproject.domain.dto.user.UserLoginRequest;
 import com.likelion.finalproject.exception.AppException;
 import com.likelion.finalproject.exception.ErrorCode;
 import com.likelion.finalproject.service.UserService;
@@ -15,7 +15,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.ArgumentMatchers.any;

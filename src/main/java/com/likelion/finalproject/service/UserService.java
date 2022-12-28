@@ -1,10 +1,10 @@
 package com.likelion.finalproject.service;
 
-import com.likelion.finalproject.domain.dto.UserRoleRequest;
-import com.likelion.finalproject.domain.dto.UserRoleResponse;
+import com.likelion.finalproject.domain.dto.user.UserRoleRequest;
+import com.likelion.finalproject.domain.dto.user.UserRoleResponse;
 import com.likelion.finalproject.domain.entity.User;
-import com.likelion.finalproject.domain.dto.UserJoinRequest;
-import com.likelion.finalproject.domain.dto.UserDto;
+import com.likelion.finalproject.domain.dto.user.UserJoinRequest;
+import com.likelion.finalproject.domain.dto.user.UserDto;
 import com.likelion.finalproject.enums.UserRole;
 import com.likelion.finalproject.exception.AppException;
 import com.likelion.finalproject.exception.ErrorCode;

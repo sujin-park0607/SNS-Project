@@ -1,6 +1,6 @@
 package com.likelion.finalproject.service;
 
-import com.likelion.finalproject.domain.dto.*;
+import com.likelion.finalproject.domain.dto.post.*;
 import com.likelion.finalproject.domain.entity.Post;
 import com.likelion.finalproject.domain.entity.User;
 import com.likelion.finalproject.enums.UserRole;

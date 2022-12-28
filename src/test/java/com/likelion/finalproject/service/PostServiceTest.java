@@ -1,24 +1,18 @@
 package com.likelion.finalproject.service;
 
-import com.likelion.finalproject.domain.dto.PostDto;
-import com.likelion.finalproject.domain.dto.PostGetResponse;
-import com.likelion.finalproject.domain.dto.PostRequest;
-import com.likelion.finalproject.domain.dto.PostUpdateResponse;
+import com.likelion.finalproject.domain.dto.post.PostGetResponse;
+import com.likelion.finalproject.domain.dto.post.PostRequest;
 import com.likelion.finalproject.domain.entity.Post;
 import com.likelion.finalproject.domain.entity.User;
 import com.likelion.finalproject.exception.AppException;
 import com.likelion.finalproject.exception.ErrorCode;
 import com.likelion.finalproject.repository.PostRepository;
 import com.likelion.finalproject.repository.UserRepository;
-import io.jsonwebtoken.lang.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
-import javax.persistence.PostUpdate;
-import javax.swing.text.html.Option;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;

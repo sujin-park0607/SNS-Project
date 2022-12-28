@@ -1,7 +1,7 @@
 package com.likelion.finalproject.controller;
 
-import com.likelion.finalproject.domain.dto.*;
 import com.likelion.finalproject.domain.dto.Response;
+import com.likelion.finalproject.domain.dto.post.*;
 import com.likelion.finalproject.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
