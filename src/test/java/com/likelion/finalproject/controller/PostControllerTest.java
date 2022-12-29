@@ -63,8 +63,20 @@ class PostControllerTest {
     }
 
     //controller 로직만 따로 검증
-    //service는 mock객체로 구현
+    //service는 mock라이브러리로 구현
     //controller의 반환값이 무엇인지를 중점으로 생각하고 코드를 작성함
+
+//    {
+//        "resultCode":"SUCCESS",
+//            "result":{
+//                  "id" : 1,
+//                "title" : "title1",
+//                "body" : "body",
+//                "userName" : "user1",
+//                "createdAt" : yyyy-mm-dd hh:mm:ss,
+//                "lastModifiedAt" : yyyy-mm-dd hh:mm:ss
+//    }
+//    }
     @Test
     @DisplayName("포스트 단건 조회 성공")
     @WithMockUser //인증된 상태
@@ -80,7 +92,7 @@ class PostControllerTest {
         //조회하는 데이터 만들기
         given(postService.getPost(any())).willReturn(postGetResponse);
 
-        //해당 url로 post요청
+        //해당 url로 get요청
         mockMvc.perform(get(url)
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
@@ -116,6 +128,13 @@ class PostControllerTest {
 
 
 
+//    {
+//        "resultCode":"SUCCESS",
+//              "result":{
+//              "message":"포스트 등록 완료",
+//               "postId":0
+//          }
+//    }
     @Test
     @DisplayName("포스트 작성 성공")
     @WithMockUser //인증된 상태
@@ -143,6 +162,7 @@ class PostControllerTest {
                 .andDo(print());
     }
 
+    //INVALID_PERMISSION
     @Test
     @DisplayName("포스트 작성 실패(1) - 로그인 하지 않은 경우")
     @WithAnonymousUser //인증되지 않은 상태

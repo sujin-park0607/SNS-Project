@@ -5,7 +5,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
-@SpringBootTest
+//@SpringBootTest
 class FinalProjectApplicationTests {
 
     @Test
