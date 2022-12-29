@@ -39,14 +39,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-@WebMvcTest(PostController.class)
+@WebMvcTest(PostController.class) //()에 작성된 클래스만 실제로 로드하여 테스트 진행
 @MockBean(JpaMetamodelMappingContext.class)
 class PostControllerTest {
 
     @Autowired
     MockMvc mockMvc;
 
-    @MockBean
+    @MockBean // 테스트할 클래스에서 주입받고 있는 객체에 대한 가짜 객체를 생성해주는 어노테이션
     PostService postService;
 
     @Autowired
@@ -62,9 +62,12 @@ class PostControllerTest {
         token = JwtTokenUtil.createToken("sujin", key, System.currentTimeMillis() + expireTimeMs);
     }
 
+    //controller 로직만 따로 검증
+    //service는 mock객체로 구현
+    //controller의 반환값이 무엇인지를 중점으로 생각하고 코드를 작성함
     @Test
     @DisplayName("포스트 단건 조회 성공")
-    @WithMockUser
+    @WithMockUser //인증된 상태
     void postGet_success() throws Exception {
 
         String url = "/api/v1/posts/1";
@@ -74,13 +77,16 @@ class PostControllerTest {
                 .body("내용")
                 .userName("sujin")
                 .build();
-
+        //조회하는 데이터 만들기
         given(postService.getPost(any())).willReturn(postGetResponse);
+
+        //해당 url로 post요청
         mockMvc.perform(get(url)
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsBytes(postGetResponse)))
                 .andExpect(status().isOk())
+                //해당 내용이 있는지 테스트
                 .andExpect(jsonPath("$.result.id").exists())
                 .andExpect(jsonPath("$.result.title").exists())
                 .andExpect(jsonPath("$.result.body").exists())
@@ -112,20 +118,25 @@ class PostControllerTest {
 
     @Test
     @DisplayName("포스트 작성 성공")
-    @WithMockUser
+    @WithMockUser //인증된 상태
     void postAdd_success() throws Exception {
 
+        //예시 데이터
         String title = "테스트";
         String body = "테스트 데이터입니다";
         String url = "/api/v1/posts";
 
         PostRequest postAddRequest = new PostRequest(title, body);
 
+        //작성될 포스트를 만듦
         given(postService.add(any(), any())).willReturn(new PostDto(1L, title, body));
+
+        //해당 url로 post요청
         mockMvc.perform(post(url)
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsBytes(postAddRequest)))
+                //해당 내용이 있는지 테스트
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.result.message").exists())
                 .andExpect(jsonPath("$.result.postId").exists())
@@ -134,7 +145,7 @@ class PostControllerTest {
 
     @Test
     @DisplayName("포스트 작성 실패(1) - 로그인 하지 않은 경우")
-    @WithAnonymousUser
+    @WithAnonymousUser //인증되지 않은 상태
     void not_login_user() throws Exception {
 
         String title = "테스트";
@@ -143,6 +154,7 @@ class PostControllerTest {
 
         PostRequest postRequest = new PostRequest(title, body);
 
+        //에러가 나는 service 만들기
         given(postService.add(any(), any())).willThrow(new AppException(ErrorCode.INVALID_PERMISSION, "사용자가 권한이 없습니다."));
 
         mockMvc.perform(post(url)

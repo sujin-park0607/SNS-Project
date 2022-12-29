@@ -31,6 +31,9 @@ public class PostServiceTest {
         postService = new PostService(postRepository, userRepository);
     }
 
+    //service 로직만 따로 검증
+    //해당 로직 검증에 필요한 요소들을 mock객체로 구현
+    //결과값이 맞는지 확인
     @Test
     @DisplayName("등록 성공")
     void postAdd_success() {
