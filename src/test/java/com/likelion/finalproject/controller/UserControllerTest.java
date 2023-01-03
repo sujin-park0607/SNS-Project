@@ -66,6 +66,10 @@ class UserControllerTest {
                 .andExpect(status().isOk());
     }
 
+//- request가 있다면 request 데이터를 만들어줌
+//- mock라이브러리를 통해서 Service 결과를 정의
+//- 결론적으로 내가 예상하는 결과값이 맞는지 비교
+
     @Test
     @DisplayName("회원가입 실패 - userName중복인 경우")
     @WithMockUser

@@ -6,6 +6,7 @@ import com.likelion.finalproject.domain.entity.User;
 import com.likelion.finalproject.enums.UserRole;
 import com.likelion.finalproject.exception.AppException;
 import com.likelion.finalproject.exception.ErrorCode;
+import com.likelion.finalproject.repository.CommentRepository;
 import com.likelion.finalproject.repository.PostRepository;
 import com.likelion.finalproject.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,7 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final UserRepository userRepository;
+    private final CommentRepository commentRepository;
 
     public PostDto add(PostRequest request, String userName) {
         //user가 존재하지 않을 때
@@ -89,4 +91,7 @@ public class PostService {
         post.update(request.getTitle(), request.getBody(), user);
         return new PostUpdateResponse("포스트 수정 완료", postRepository.save(post).getId());
     }
+
+
+
 }

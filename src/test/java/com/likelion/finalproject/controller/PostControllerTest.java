@@ -63,7 +63,7 @@ class PostControllerTest {
     }
 
     //controller 로직만 따로 검증
-    //service는 mock라이브러리로 구현
+    //service는 mock라이브러리로 정의
     //controller의 반환값이 무엇인지를 중점으로 생각하고 코드를 작성함
 
 //    {
@@ -75,7 +75,7 @@ class PostControllerTest {
 //                "userName" : "user1",
 //                "createdAt" : yyyy-mm-dd hh:mm:ss,
 //                "lastModifiedAt" : yyyy-mm-dd hh:mm:ss
-//    }
+//             }
 //    }
     @Test
     @DisplayName("포스트 단건 조회 성공")
@@ -83,20 +83,20 @@ class PostControllerTest {
     void postGet_success() throws Exception {
 
         String url = "/api/v1/posts/1";
+        //데이터 만들기
         PostGetResponse postGetResponse = PostGetResponse.builder()
                 .id(1L)
                 .title("제목")
                 .body("내용")
                 .userName("sujin")
                 .build();
-        //조회하는 데이터 만들기
+
+        //service 정의
         given(postService.getPost(any())).willReturn(postGetResponse);
 
         //해당 url로 get요청
         mockMvc.perform(get(url)
-                        .with(csrf())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsBytes(postGetResponse)))
+                        .with(csrf()))
                 .andExpect(status().isOk())
                 //해당 내용이 있는지 테스트
                 .andExpect(jsonPath("$.result.id").exists())
@@ -105,6 +105,43 @@ class PostControllerTest {
                 .andExpect(jsonPath("$.result.userName").exists())
                 .andDo(print());
     }
+
+
+    //    {
+//        "resultCode":"SUCCESS",
+//              "result":{
+//              "message":"포스트 등록 완료",
+//               "postId":0
+//          }
+//    }
+    @Test
+    @DisplayName("포스트 작성 성공")
+    @WithMockUser //인증된 상태
+    void postAdd_success() throws Exception {
+
+        //예시 데이터
+        String title = "테스트";
+        String body = "테스트 데이터입니다";
+        String url = "/api/v1/posts";
+
+        PostRequest postAddRequest = new PostRequest(title, body);
+
+        //service 정의 - 포스트 추가
+        given(postService.add(any(), any())).willReturn(new PostDto(1L, title, body));
+
+        //해당 url로 post요청
+        mockMvc.perform(post(url)
+                        .with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsBytes(postAddRequest)))
+                //해당 내용이 있는지 테스트
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result.message").exists())
+                .andExpect(jsonPath("$.result.postId").exists())
+                .andDo(print());
+    }
+
+    //============================================================================
 
     @Test
     @DisplayName("포스트 전체 조회 성공")
@@ -128,39 +165,7 @@ class PostControllerTest {
 
 
 
-//    {
-//        "resultCode":"SUCCESS",
-//              "result":{
-//              "message":"포스트 등록 완료",
-//               "postId":0
-//          }
-//    }
-    @Test
-    @DisplayName("포스트 작성 성공")
-    @WithMockUser //인증된 상태
-    void postAdd_success() throws Exception {
 
-        //예시 데이터
-        String title = "테스트";
-        String body = "테스트 데이터입니다";
-        String url = "/api/v1/posts";
-
-        PostRequest postAddRequest = new PostRequest(title, body);
-
-        //작성될 포스트를 만듦
-        given(postService.add(any(), any())).willReturn(new PostDto(1L, title, body));
-
-        //해당 url로 post요청
-        mockMvc.perform(post(url)
-                        .with(csrf())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsBytes(postAddRequest)))
-                //해당 내용이 있는지 테스트
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.result.message").exists())
-                .andExpect(jsonPath("$.result.postId").exists())
-                .andDo(print());
-    }
 
     //INVALID_PERMISSION
     @Test

@@ -63,6 +63,7 @@ public class PostServiceTest {
     @Test
     @DisplayName("수정 실패 : 작성자!=유저")
     void postUpdate_fail_mismatch_author_user() {
+        //test데이터
         User user1 = User.builder()
                 .userName("hello")
                 .role(UserRole.USER)
@@ -73,7 +74,7 @@ public class PostServiceTest {
                 .userName("sujin")
                 .build();
 
-        //test데이터
+
         Post post = Post.builder()
                 .id(1L)
                 .user(user1)
@@ -82,7 +83,9 @@ public class PostServiceTest {
                 .build();
 
         //repository결과 정의
+        //포스트 작성자: user1의 post
         when(postRepository.findById(post.getId())).thenReturn(Optional.of(post));
+        //유저: 수정 요청 user2
         when(userRepository.findByUserName(user2.getUserName())).thenReturn(Optional.of(user2));
 
         //에러발생
@@ -93,6 +96,10 @@ public class PostServiceTest {
         //에러확인
         Assertions.assertEquals(ErrorCode.INVALID_PERMISSION, exception.getErrorCode());
     }
+
+//- 테스트 시 필요한 데이터를 mock으로 생성
+//- repository 결과를 정의
+//- 결과값 예상값 비교
 
 
     @Test

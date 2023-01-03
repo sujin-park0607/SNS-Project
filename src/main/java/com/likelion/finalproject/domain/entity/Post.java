@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @RequiredArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public class Post{
+public class Post extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -24,21 +24,10 @@ public class Post{
     @JoinColumn(name = "user_id")
     private User user;
 
-
-    @Column(name = "create_at")
-    @CreatedDate
-    private LocalDateTime createAt;
-
-
-    @Column(name = "last_modified_at")
-    @LastModifiedDate
-    private LocalDateTime lastModifiedAt;
-
     public void update(String title, String body, User user){
         this.title = title;
         this.body = body;
         this.user = user;
-        this.lastModifiedAt = LocalDateTime.now();
     }
 
 }
