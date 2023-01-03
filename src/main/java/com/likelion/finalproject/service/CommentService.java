@@ -1,5 +1,6 @@
 package com.likelion.finalproject.service;
 
+import com.likelion.finalproject.domain.dto.comment.CommentDeleteResponse;
 import com.likelion.finalproject.domain.dto.comment.CommentRequest;
 import com.likelion.finalproject.domain.dto.comment.CommentResponse;
 import com.likelion.finalproject.domain.dto.post.PostRequest;
@@ -80,9 +81,29 @@ public class CommentService {
         return CommentResponse.fromEntity(commentRepository.save(comment));
     }
 
+
     /**
      * 댓글 삭제
      */
+    public CommentDeleteResponse deleteComment(Long postId, Long id, String userName) {
+        //로그인 user 확인
+        User user = userRepository.findByUserName(userName)
+                .orElseThrow(() -> new AppException(ErrorCode.USERNAME_NOT_FOUND, ErrorCode.USERNAME_NOT_FOUND.getMessage()));
+
+        //post 유무 확인
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new AppException(ErrorCode.POST_NOT_FOUND, ErrorCode.POST_NOT_FOUND.getMessage()));
+
+        //작성자 != 삭제자
+        if(user.getId() != post.getUser().getId()){
+            throw new AppException(ErrorCode.INVALID_PERMISSION, ErrorCode.INVALID_PERMISSION.getMessage());
+        }
+
+        commentRepository.deleteById(id);
+        return new CommentDeleteResponse("댓글 삭제 완료", id);
+
+    }
+
 
 
 

@@ -25,7 +25,6 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final UserRepository userRepository;
-    private final CommentRepository commentRepository;
 
     public PostDto add(PostRequest request, String userName) {
         //user가 존재하지 않을 때

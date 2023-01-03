@@ -1,6 +1,7 @@
 package com.likelion.finalproject.controller;
 
 import com.likelion.finalproject.domain.dto.Response;
+import com.likelion.finalproject.domain.dto.comment.CommentDeleteResponse;
 import com.likelion.finalproject.domain.dto.comment.CommentRequest;
 import com.likelion.finalproject.domain.dto.comment.CommentResponse;
 import com.likelion.finalproject.service.CommentService;
@@ -48,5 +49,15 @@ public class CommentController {
         String userName = authentication.getName();
         CommentResponse commentUpdateResponse = commentService.updateComment(postId, id, request, userName);
         return Response.success(commentUpdateResponse);
+    }
+
+    /**
+     * 댓글 삭제
+     */
+    @DeleteMapping("/{postId}/comments/{id}")
+    public Response<CommentDeleteResponse> commentDelete(@PathVariable Long postId, @PathVariable Long id, Authentication authentication){
+        String userName = authentication.getName();
+        CommentDeleteResponse commentDeleteResponse = commentService.deleteComment(postId, id, userName);
+        return Response.success(commentDeleteResponse);
     }
 }
