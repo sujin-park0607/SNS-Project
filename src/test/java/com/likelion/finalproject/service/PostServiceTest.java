@@ -29,7 +29,7 @@ public class PostServiceTest {
 
     @BeforeEach
     void setUp() {
-        postService = new PostService(postRepository, userRepository);
+        postService = new PostService(postRepository, userRepository, new ValidateService(userRepository, postRepository));
     }
 
     //service 로직만 따로 검증
@@ -39,7 +39,11 @@ public class PostServiceTest {
     @Test
     @DisplayName("수정 실패 : 포스트 존재하지 않음")
     void postUpdate_fail_non_post() {
-        User user = mock(User.class);
+        //test데이터
+        User user = User.builder()
+                .userName("hello")
+                .role(UserRole.USER)
+                .build();
 
         //test데이터
         Post post = Post.builder()
@@ -50,6 +54,7 @@ public class PostServiceTest {
 
         //repository결과 정의 - 포스트가 존재하지 않음
         when(postRepository.findById(post.getId())).thenReturn(Optional.empty());
+        when(userRepository.findByUserName(user.getUserName())).thenReturn(Optional.of(user));
 
         //에러발생
         AppException exception = Assertions.assertThrows(AppException.class, ()-> {

@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 public class UserService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder encoder;
+    private final ValidateService validateService;
     @Value("${jwt.token.secret}")
     private String key;
     private long expireTimeMs = 1000 * 60 * 60;
@@ -42,9 +43,10 @@ public class UserService {
     }
 
     public String login(String userName, String password) {
+
         //userName 확인
-        User user = userRepository.findByUserName(userName)
-                .orElseThrow(()-> new AppException(ErrorCode.USERNAME_NOT_FOUND, userName+"이 없습니다."));
+        User user = validateService.validateUser(userName);
+
         //password 확인
         if(!encoder.matches(password,user.getPassword())){
             throw new AppException(ErrorCode.INVALID_PASSWORD,"password가 일치하지 않습니다.");

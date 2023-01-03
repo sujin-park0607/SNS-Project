@@ -1,5 +1,6 @@
 package com.likelion.finalproject.service;
 
+import com.likelion.finalproject.domain.dto.ValidateUserPostDto;
 import com.likelion.finalproject.domain.dto.post.*;
 import com.likelion.finalproject.domain.entity.Post;
 import com.likelion.finalproject.domain.entity.User;
@@ -25,11 +26,14 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final UserRepository userRepository;
+    private final ValidateService validateService;
 
+    /**
+     * 게시물 작성
+     */
     public PostDto add(PostRequest request, String userName) {
         //user가 존재하지 않을 때
-        User user = userRepository.findByUserName(userName)
-                .orElseThrow(() -> new AppException(ErrorCode.USERNAME_NOT_FOUND, userName + "가 없습니다."));
+        User user = validateService.validateUser(userName);
 
         Post post = Post.builder()
                 .user(user)
@@ -37,12 +41,12 @@ public class PostService {
                 .body(request.getBody())
                 .build();
         Post savedPost = postRepository.save(post);
-        log.info("title:{}",savedPost.getTitle());
-        log.info("body:{}",savedPost.getTitle());
-
         return PostDto.toEntity(savedPost);
     }
 
+    /**
+     * 전체 게시물 조회
+     */
     public List<PostGetResponse> getAllPost(Pageable pageable) {
         Page<Post> posts = postRepository.findAll(pageable);
         List<PostGetResponse> postGetRespons = posts.stream()
@@ -50,45 +54,45 @@ public class PostService {
         return postGetRespons;
     }
 
+    /**
+     * 상세 게시물 조회
+     */
     public PostGetResponse getPost(Long id) {
-        Post post = postRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.POST_NOT_FOUND, "해당 게시물이 없습니다"));
+        //게시물의 유무 확인
+        Post post = validateService.validatePost(id);
         return PostGetResponse.fromEntity(post);
     }
 
+    /**
+     * 게시물 삭제
+     */
     public PostDeleteResponse delete(Long id, String userName) {
-        //사용자가 존재하지 않을경우
-        User user = userRepository.findByUserName(userName)
-                .orElseThrow(() -> new AppException(ErrorCode.USERNAME_NOT_FOUND, userName + "가 없습니다."));
-
-        //post가 존재하지 않을 경우
-        Post post = postRepository.findById(id)
-                .orElseThrow(()-> new AppException(ErrorCode.POST_NOT_FOUND, "포스트가 존재하지 않습니다."));
+        //로그인한 사용자와 게시물의 유무 확인
+        ValidateUserPostDto validateUserPost = validateService.validateUserPost(userName, id);
 
         //User이며 작성자가 불일치할 경우
-        if(user.getRole() == UserRole.USER && !post.getUser().getUserName().equals(userName)){
+        if(validateUserPost.getUser().getRole() == UserRole.USER && !validateUserPost.getPost().getUser().getUserName().equals(userName)){
             throw new AppException(ErrorCode.INVALID_PERMISSION,"권한이 없습니다.");
         }
 
-        postRepository.delete(post);
-        return new PostDeleteResponse("포스트 삭제 완료", post.getId());
+        postRepository.delete(validateUserPost.getPost());
+        return new PostDeleteResponse("포스트 삭제 완료", validateUserPost.getPost().getId());
     }
 
+    /**
+     * 게시물 수정
+     */
     public PostUpdateResponse update(Long id, PostRequest request, String userName) {
-        //post가 존재하지 않을 경우
-        Post post = postRepository.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.POST_NOT_FOUND, "해당 게시물이 없습니다"));
-
-        //사용자가 존재하지 않을경우
-        User user = userRepository.findByUserName(userName)
-                .orElseThrow(() -> new AppException(ErrorCode.USERNAME_NOT_FOUND, userName + "가 없습니다."));
+        //로그인한 사용자와 게시물의 유무 확인
+        ValidateUserPostDto validateUserPost = validateService.validateUserPost(userName, id);
 
         //작성자 불일치, admin 허용
-        if(user.getRole() == UserRole.USER && !post.getUser().getUserName().equals(userName)){
+        if(validateUserPost.getUser().getRole() == UserRole.USER && !validateUserPost.getPost().getUser().getUserName().equals(userName)){
             throw new AppException(ErrorCode.INVALID_PERMISSION,"권한이 없습니다.");
         }
 
-        post.update(request.getTitle(), request.getBody(), user);
-        return new PostUpdateResponse("포스트 수정 완료", postRepository.save(post).getId());
+        validateUserPost.getPost().update(request.getTitle(), request.getBody(), validateUserPost.getUser());
+        return new PostUpdateResponse("포스트 수정 완료", postRepository.save(validateUserPost.getPost()).getId());
     }
 
 
