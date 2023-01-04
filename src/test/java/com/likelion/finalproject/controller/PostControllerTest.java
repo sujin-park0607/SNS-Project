@@ -66,17 +66,6 @@ class PostControllerTest {
     //service는 mock라이브러리로 정의
     //controller의 반환값이 무엇인지를 중점으로 생각하고 코드를 작성함
 
-//    {
-//        "resultCode":"SUCCESS",
-//            "result":{
-//                  "id" : 1,
-//                "title" : "title1",
-//                "body" : "body",
-//                "userName" : "user1",
-//                "createdAt" : yyyy-mm-dd hh:mm:ss,
-//                "lastModifiedAt" : yyyy-mm-dd hh:mm:ss
-//             }
-//    }
     @Test
     @DisplayName("포스트 단건 조회 성공")
     @WithMockUser //인증된 상태

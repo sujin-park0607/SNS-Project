@@ -13,6 +13,7 @@ import com.likelion.finalproject.repository.CommentRepository;
 import com.likelion.finalproject.repository.PostRepository;
 import com.likelion.finalproject.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CommentService {
 
     private final CommentRepository commentRepository;
@@ -88,9 +90,6 @@ public class CommentService {
         return new CommentDeleteResponse("댓글 삭제 완료", id);
 
     }
-
-
-
 
 
 }
