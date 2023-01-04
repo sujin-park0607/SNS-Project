@@ -1,6 +1,7 @@
 package com.likelion.finalproject.controller;
 
 import com.likelion.finalproject.domain.dto.Response;
+import com.likelion.finalproject.domain.dto.comment.CommentResponse;
 import com.likelion.finalproject.domain.dto.post.*;
 import com.likelion.finalproject.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -65,6 +66,17 @@ public class PostController {
         String userName = authentication.getName();
         PostUpdateResponse response = postService.update(id, request, userName);
         return Response.success(response);
+    }
+
+    /**
+     * 마이피드
+     */
+    @GetMapping("/my")
+    public Response<Page<PostGetResponse>> getMyList(Authentication authentication){
+        String userName = authentication.getName();
+        PageRequest pageable = PageRequest.of(0,20, Sort.by("id").descending());
+        List<PostGetResponse> postGetRespons = postService.getMyPost(pageable, userName);
+        return Response.success( new PageImpl<> (postGetRespons));
     }
 
 

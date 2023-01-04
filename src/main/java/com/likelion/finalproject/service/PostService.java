@@ -13,6 +13,7 @@ import com.likelion.finalproject.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +26,6 @@ import java.util.stream.Collectors;
 public class PostService {
 
     private final PostRepository postRepository;
-    private final UserRepository userRepository;
     private final ValidateService validateService;
 
     /**
@@ -95,6 +95,15 @@ public class PostService {
         return new PostUpdateResponse("포스트 수정 완료", postRepository.save(validateUserPost.getPost()).getId());
     }
 
+    /**
+     * 마이 피드
+     */
+    public List<PostGetResponse> getMyPost(PageRequest pageable, String userName) {
+        User user = validateService.validateUser(userName);
+        Page<Post> myPosts = postRepository.findPostByUser(user, pageable);
+        List<PostGetResponse> myPostGetResponse = myPosts.stream()
+                .map(post -> PostGetResponse.fromEntity(post)).collect(Collectors.toList());
 
-
+        return myPostGetResponse;
+    }
 }
