@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.*;
 public class LikeController {
 
     private final LikeService likeService;
-
+    /**
+     * 좋아요 및 좋아요 취소
+     */
     @PostMapping
     public Response<String> addLike(@PathVariable Long postId, Authentication authentication){
         String userName = authentication.getName();
@@ -22,6 +24,9 @@ public class LikeController {
         return Response.success(message);
     }
 
+    /**
+     * 좋아요 개수 조회
+     */
     @GetMapping
     public Response<Integer> getLike(@PathVariable Long postId, Authentication authentication){
         String userName = authentication.getName();
