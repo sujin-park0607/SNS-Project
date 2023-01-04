@@ -4,11 +4,14 @@ import com.likelion.finalproject.domain.dto.ValidateUserPostDto;
 import com.likelion.finalproject.domain.dto.comment.CommentDeleteResponse;
 import com.likelion.finalproject.domain.dto.comment.CommentRequest;
 import com.likelion.finalproject.domain.dto.comment.CommentResponse;
+import com.likelion.finalproject.domain.entity.Alarm;
 import com.likelion.finalproject.domain.entity.Comment;
 import com.likelion.finalproject.domain.entity.Post;
 import com.likelion.finalproject.domain.entity.User;
+import com.likelion.finalproject.enums.AlarmType;
 import com.likelion.finalproject.exception.AppException;
 import com.likelion.finalproject.exception.ErrorCode;
+import com.likelion.finalproject.repository.AlarmRepository;
 import com.likelion.finalproject.repository.CommentRepository;
 import com.likelion.finalproject.repository.PostRepository;
 import com.likelion.finalproject.repository.UserRepository;
@@ -29,6 +32,7 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
     private final ValidateService validateService;
+    private final AlarmRepository alarmRepository;
 
     /**
      * 댓글 전체 조회
@@ -55,6 +59,10 @@ public class CommentService {
         //댓글 저장
         Comment comment = Comment.toEntity(request, validateUserPost.getPost(), validateUserPost.getUser());
         Comment savedComment = commentRepository.save(comment);
+
+        //알람 저장
+        Alarm alarm = Alarm.toEntity(AlarmType.COMMENT, validateUserPost.getUser(), validateUserPost.getPost());
+        alarmRepository.save(alarm);
 
         return CommentResponse.fromEntity(savedComment);
 

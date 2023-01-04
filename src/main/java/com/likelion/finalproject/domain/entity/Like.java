@@ -1,6 +1,5 @@
 package com.likelion.finalproject.domain.entity;
 
-import com.likelion.finalproject.domain.dto.comment.CommentRequest;
 import lombok.*;
 
 import javax.persistence.*;

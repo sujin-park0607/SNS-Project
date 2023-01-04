@@ -28,9 +28,8 @@ public class LikeController {
      * 좋아요 개수 조회
      */
     @GetMapping
-    public Response<Integer> getLike(@PathVariable Long postId, Authentication authentication){
-        String userName = authentication.getName();
-        Integer count = likeService.countLike(postId, userName);
+    public Response<Integer> getLike(@PathVariable Long postId){
+        Integer count = likeService.countLike(postId);
         return Response.success(count);
     }
 
