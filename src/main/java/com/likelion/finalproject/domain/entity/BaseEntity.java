@@ -1,6 +1,7 @@
 package com.likelion.finalproject.domain.entity;
 
 import lombok.Getter;
+import org.hibernate.annotations.SQLDelete;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -23,5 +24,8 @@ public class BaseEntity {
     @Column(name = "last_modified_at")
     @LastModifiedDate
     private LocalDateTime lastModifiedAt;
+
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
 
 }

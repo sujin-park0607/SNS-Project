@@ -1,6 +1,7 @@
 package com.likelion.finalproject.domain.entity;
 
 import lombok.*;
+import org.hibernate.annotations.SQLDelete;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "likes")
+@SQLDelete(sql = "UPDATE likes SET deleted_at = now() WHERE id = ?")
 public class Like extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,8 +26,6 @@ public class Like extends BaseEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(name = "deleted_at")
-    private LocalDateTime deletedAt;
 
     public static Like toEntity(Post post, User user) {
         return Like.builder()

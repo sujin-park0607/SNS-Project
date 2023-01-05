@@ -1,6 +1,8 @@
 package com.likelion.finalproject.domain.entity;
 
 import lombok.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -13,6 +15,8 @@ import java.time.LocalDateTime;
 @Getter
 @AllArgsConstructor
 @RequiredArgsConstructor
+@SQLDelete(sql = "UPDATE post SET deleted_at = now() WHERE id = ?")
+@Where(clause = "deleted_at is null")
 @EntityListeners(AuditingEntityListener.class)
 public class Post extends BaseEntity{
     @Id
