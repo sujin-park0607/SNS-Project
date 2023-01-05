@@ -22,6 +22,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -47,45 +48,36 @@ class CommentControllerTest {
     @Autowired
     ObjectMapper objectMapper;
 
-//    @Test
-//    @DisplayName("댓글 조회")
-//    @WithMockUser
-//    void getComment_success() throws Exception{
-//
-//        String url = "/api/v1/posts/2/comments";
-//
-//        CommentResponse commentResponse = CommentResponse.builder()
-//                .id(1L)
-//                .comment("댓글")
-//                .userName("수진")
-//                .postId(1L)
-//                .build();
-//
-//        CommentResponse commentResponse2 = CommentResponse.builder()
-//                .id(2L)
-//                .comment("댓글")
-//                .userName("수진")
-//                .postId(1L)
-//                .build();
-//        List<CommentResponse> commentResponseList = new ArrayList<>();
-//        commentResponseList.add(commentResponse);
-//        commentResponseList.add(commentResponse2);
-//
-//        given(commentService.getAllComment(any(), any())).willReturn(commentResponseList);
-//
-//        mockMvc.perform(get(url)
-//                        .param("sort", "id,desc")
-//                        .with(csrf()))
-//                .andExpect(status().isOk())
-//                //해당 내용이 있는지 테스트
-//                .andExpect(jsonPath("$.result.id").exists())
-//                .andExpect(jsonPath("$.result.comment").exists())
-//                .andExpect(jsonPath("$.result.userName").exists())
-//                .andExpect(jsonPath("$.result.postId").exists())
-//                .andExpect(jsonPath("$.result.createdAt").exists())
-//                .andDo(print());
-//
-//    }
+    @Test
+    @DisplayName("댓글 조회")
+    @WithMockUser
+    void getComment_success() throws Exception{
+
+        String url = "/api/v1/posts/2/comments";
+
+        CommentResponse commentResponse = CommentResponse.builder()
+                .id(1L)
+                .comment("댓글")
+                .userName("수진")
+                .postId(1L)
+                .build();
+
+        List<CommentResponse> commentResponseList = Arrays.asList(commentResponse);
+
+        given(commentService.getAllComment(any(), any())).willReturn(commentResponseList);
+
+        mockMvc.perform(get(url)
+                        .param("sort", "id,desc")
+                        .with(csrf()))
+                .andExpect(status().isOk())
+                //해당 내용이 있는지 테스트
+                .andExpect(jsonPath("$.result.content[0].id").value(1L))
+                .andExpect(jsonPath("$.result.content[0].comment").value("댓글"))
+                .andExpect(jsonPath("$.result.content[0].userName").value("수진"))
+                .andExpect(jsonPath("$.result.content[0].postId").value(1L))
+                .andDo(print());
+
+    }
 
     @Test
     @DisplayName("댓글 등록")
@@ -106,11 +98,11 @@ class CommentControllerTest {
                         .content(objectMapper.writeValueAsBytes(commentRequest)))
                 //해당 내용이 있는지 테스트
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.result.id").exists())
-                .andExpect(jsonPath("$.result.comment").exists())
-                .andExpect(jsonPath("$.result.userName").exists())
-                .andExpect(jsonPath("$.result.postId").exists())
-                .andExpect(jsonPath("$.result.createdAt").exists())
+                .andExpect(jsonPath("$.result.id").value(1L))
+                .andExpect(jsonPath("$.result.comment").value("테스트댓글"))
+                .andExpect(jsonPath("$.result.userName").value("테스트사용자"))
+                .andExpect(jsonPath("$.result.postId").value(1L))
+                .andExpect(jsonPath("$.result.createdAt").value(""))
                 .andDo(print());
 
     }

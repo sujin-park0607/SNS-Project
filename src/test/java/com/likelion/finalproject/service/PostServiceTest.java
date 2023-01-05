@@ -29,7 +29,7 @@ public class PostServiceTest {
 
     @BeforeEach
     void setUp() {
-        postService = new PostService(postRepository, userRepository, new ValidateService(userRepository, postRepository));
+        postService = new PostService(postRepository, new ValidateService(userRepository, postRepository));
     }
 
     //service 로직만 따로 검증

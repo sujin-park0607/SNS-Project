@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
@@ -25,8 +26,11 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.awt.print.Pageable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -360,8 +364,50 @@ class PostControllerTest {
                 .andDo(print());
     }
 
+    @Test
+    @DisplayName("마이피드 조회 성공")
+    @WithMockUser //인증된 상태
+    void myPeed_success() throws Exception {
 
+        String url = "/api/v1/posts/my";
+        //데이터 만들기
+        PostGetResponse postGetResponse = PostGetResponse.builder()
+                .id(1L)
+                .title("제목")
+                .body("내용")
+                .userName("sujin")
+                .build();
+        List<PostGetResponse> postGetResponseList = Arrays.asList(postGetResponse);
+        //service 정의
+        given(postService.getMyPost(any(), any())).willReturn(postGetResponseList);
 
+        //해당 url로 get요청
+        mockMvc.perform(get(url)
+                        .with(csrf()))
+                .andExpect(status().isOk())
+                //해당 내용이 있는지 테스트
+                .andExpect(jsonPath("$.result.content[0].id").value(1L))
+                .andExpect(jsonPath("$.result.content[0].title").value("제목"))
+                .andExpect(jsonPath("$.result.content[0].body").value("내용"))
+                .andExpect(jsonPath("$.result.content[0].userName").value("sujin"))
+                .andDo(print());
+    }
 
+    @Test
+    @DisplayName("마이피드 조회 실패(1) - 로그인 하지 않은 경우")
+    @WithAnonymousUser
+    void myPeed_fail_non_login() throws Exception {
 
+        String url = "/api/v1/posts/my";
+
+        //service 정의
+        given(postService.getMyPost(any(), any())).willThrow(new AppException(ErrorCode.INVALID_PERMISSION,ErrorCode.INVALID_PERMISSION.getMessage()));
+
+        //해당 url로 get요청
+        mockMvc.perform(get(url)
+                        .with(csrf()))
+                .andExpect(status().isUnauthorized())
+                //해당 내용이 있는지 테스트
+                .andDo(print());
+    }
 }
