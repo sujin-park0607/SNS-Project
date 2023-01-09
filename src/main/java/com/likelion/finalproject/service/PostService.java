@@ -8,6 +8,7 @@ import com.likelion.finalproject.enums.UserRole;
 import com.likelion.finalproject.exception.AppException;
 import com.likelion.finalproject.exception.ErrorCode;
 import com.likelion.finalproject.repository.CommentRepository;
+import com.likelion.finalproject.repository.LikeRepository;
 import com.likelion.finalproject.repository.PostRepository;
 import com.likelion.finalproject.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,15 +18,19 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional
 public class PostService {
 
     private final PostRepository postRepository;
+    private final CommentRepository commentRepository;
+    private final LikeRepository likeRepository;
     private final ValidateService validateService;
 
     /**
@@ -75,7 +80,13 @@ public class PostService {
             throw new AppException(ErrorCode.INVALID_PERMISSION,"권한이 없습니다.");
         }
 
+        //post 삭제
         postRepository.delete(validateUserPost.getPost());
+
+        //해당 post의 comment, like 삭제
+//        commentRepository.deleteAllByPost(validateUserPost.getPost());
+//        likeRepository.deleteAllByPost(validateUserPost.getPost());
+
         return new PostDeleteResponse("포스트 삭제 완료", validateUserPost.getPost().getId());
     }
 

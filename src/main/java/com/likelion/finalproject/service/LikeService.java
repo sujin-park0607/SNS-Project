@@ -58,7 +58,6 @@ public class LikeService {
                 //다시 좋아요 누르기
             } else {
                 likeRepository.reSave(like.get().getId());
-
                 //알람 저장
                 Alarm alarm = Alarm.toEntity(AlarmType.LIKE, validateUserPost.getUser(), validateUserPost.getPost());
                 alarmRepository.save(alarm);
@@ -75,7 +74,7 @@ public class LikeService {
         Post post = validateService.validatePost(postId);
 
         //해당 포스트의 like 개수 확인
-        Integer likeCnt = likeRepository.countByPost(post);
+        Integer likeCnt = likeRepository.countBypost(post);
 
         return likeCnt;
     }

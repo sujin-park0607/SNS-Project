@@ -5,10 +5,6 @@ import com.likelion.finalproject.domain.entity.Alarm;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import org.springframework.web.bind.annotation.GetMapping;
-
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 
 @Getter
 @Builder

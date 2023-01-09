@@ -9,6 +9,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Builder
@@ -27,6 +29,12 @@ public class Post extends BaseEntity{
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+//    orphanRemoval = true
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
+    List<Comment> commentList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
+    List<Like> likeList = new ArrayList<>();
 
     public void update(String title, String body, User user){
         this.title = title;

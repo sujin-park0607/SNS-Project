@@ -19,7 +19,6 @@ import javax.persistence.*;
 @SQLDelete(sql = "UPDATE comment SET deleted_at = now() WHERE id = ?")
 @Where(clause = "deleted_at is null")
 public class Comment extends BaseEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
