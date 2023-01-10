@@ -1,8 +1,6 @@
 package com.likelion.finalproject.controller;
 
 import com.likelion.finalproject.domain.dto.Response;
-import com.likelion.finalproject.repository.CommentRepository;
-import com.likelion.finalproject.service.CommentService;
 import com.likelion.finalproject.service.LikeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;

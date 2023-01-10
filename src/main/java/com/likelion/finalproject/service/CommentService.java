@@ -7,18 +7,14 @@ import com.likelion.finalproject.domain.dto.comment.CommentResponse;
 import com.likelion.finalproject.domain.entity.Alarm;
 import com.likelion.finalproject.domain.entity.Comment;
 import com.likelion.finalproject.domain.entity.Post;
-import com.likelion.finalproject.domain.entity.User;
 import com.likelion.finalproject.enums.AlarmType;
 import com.likelion.finalproject.exception.AppException;
 import com.likelion.finalproject.exception.ErrorCode;
 import com.likelion.finalproject.repository.AlarmRepository;
 import com.likelion.finalproject.repository.CommentRepository;
-import com.likelion.finalproject.repository.PostRepository;
-import com.likelion.finalproject.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -60,12 +56,13 @@ public class CommentService {
         Comment comment = Comment.toEntity(request, validateUserPost.getPost(), validateUserPost.getUser());
         Comment savedComment = commentRepository.save(comment);
 
-        //알람 저장
+        //본인이 아닐경우는 알람에 저장
         Alarm alarm = Alarm.toEntity(AlarmType.COMMENT, validateUserPost.getUser(), validateUserPost.getPost());
-        alarmRepository.save(alarm);
+        if(validateUserPost.getUser().getId() != validateUserPost.getPost().getUser().getId()) {
+            alarmRepository.save(alarm);
+        }
 
         return CommentResponse.fromEntity(savedComment);
-
     }
 
     /**

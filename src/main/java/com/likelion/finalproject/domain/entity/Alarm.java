@@ -16,7 +16,6 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @SQLDelete(sql = "UPDATE alarm SET deleted_at = now() WHERE id = ?")
-@Where(clause = "deleted_at is null")
 public class Alarm extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

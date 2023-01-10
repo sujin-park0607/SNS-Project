@@ -25,7 +25,7 @@ public class AlarmService {
     public List<AlarmResponse> getAlarmList(String userName, Pageable pageable) {
         //로그인한 회원 확인
         User user = validateService.validateUser(userName);
-        List<Alarm> alarmList = alarmRepository.findAlarmByUser(user, pageable);
+        List<Alarm> alarmList = alarmRepository.findAlarmByUserExceptNull(user, pageable);
         List<AlarmResponse> alarmResponseList = alarmList.stream()
                 .map(alarm -> AlarmResponse.fromEntity(alarm)).collect(Collectors.toList());
         return alarmResponseList;
