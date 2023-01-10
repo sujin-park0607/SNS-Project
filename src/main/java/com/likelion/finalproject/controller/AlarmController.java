@@ -26,9 +26,10 @@ public class AlarmController {
      * 알람 기능
      */
     @GetMapping
-    public Response<List<AlarmResponse>> getAlarms(Authentication authentication){
+    public Response<Page<AlarmResponse>> getAlarms(Authentication authentication){
+        PageRequest pageable = PageRequest.of(0,20, Sort.by("id").descending());
         String userName = authentication.getName();
-        List<AlarmResponse> alarmGetResponseList = alarmService.getAlarmList(userName);
+        Page<AlarmResponse> alarmGetResponseList = alarmService.getAlarmList(userName, pageable);
         return Response.success(alarmGetResponseList);
     }
 

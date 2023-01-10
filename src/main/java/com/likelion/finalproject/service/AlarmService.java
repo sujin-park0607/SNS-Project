@@ -6,6 +6,8 @@ import com.likelion.finalproject.domain.entity.User;
 import com.likelion.finalproject.repository.AlarmRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,12 +23,12 @@ public class AlarmService {
     /**
      * 알람 조회
      */
-    public List<AlarmResponse> getAlarmList(String userName) {
+    public Page<AlarmResponse> getAlarmList(String userName, Pageable pageable) {
         //로그인한 회원 확인
         User user = validateService.validateUser(userName);
 
-        List<AlarmResponse> alarmResponseList = alarmRepository.findAlarmByUserExceptNull(user).stream()
-                .map(alarm -> AlarmResponse.fromEntity(alarm)).collect(Collectors.toList());
+        Page<AlarmResponse> alarmResponseList = alarmRepository.findAlarmByUserExceptNull(user, pageable)
+                .map(alarm -> AlarmResponse.fromEntity(alarm));
         return alarmResponseList;
 
     }

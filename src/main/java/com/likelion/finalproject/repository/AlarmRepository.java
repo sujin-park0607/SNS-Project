@@ -4,6 +4,7 @@ import com.likelion.finalproject.domain.entity.Alarm;
 import com.likelion.finalproject.domain.entity.Post;
 import com.likelion.finalproject.domain.entity.User;
 import com.likelion.finalproject.enums.AlarmType;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -24,6 +25,6 @@ public interface AlarmRepository extends JpaRepository<Alarm, Integer> {
     void reSave(@Param("alarmId") Integer alarmId);
 
     @Query("select a from Alarm a where a.user = :user and a.deletedAt is null ")
-    List<Alarm> findAlarmByUserExceptNull(@Param("user") User user);
+    Page<Alarm> findAlarmByUserExceptNull(@Param("user") User user, Pageable pageable);
 
 }
