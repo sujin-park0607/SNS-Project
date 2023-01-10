@@ -26,9 +26,9 @@ public class CommentController {
      */
     @GetMapping
     public Response<Page<CommentResponse>> getCommentList(@PathVariable Long postId){
-        PageRequest pageable = PageRequest.of(0,20, Sort.by("id").descending());
-        List<CommentResponse> commentGetResponseList = commentService.getAllComment(postId, pageable);
-        return Response.success(new PageImpl<>(commentGetResponseList));
+        PageRequest pageable = PageRequest.of(0,10, Sort.by("id").descending());
+        Page<CommentResponse> commentGetResponseList = commentService.getAllComment(postId, pageable);
+        return Response.success(commentGetResponseList);
     }
 
 

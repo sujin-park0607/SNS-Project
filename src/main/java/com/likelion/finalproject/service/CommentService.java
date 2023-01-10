@@ -33,14 +33,13 @@ public class CommentService {
     /**
      * 댓글 전체 조회
      */
-    public List<CommentResponse> getAllComment(Long postId, Pageable pageable) {
+    public Page<CommentResponse> getAllComment(Long postId, Pageable pageable) {
         //post 유무 확인
         Post post = validateService.validatePost(postId);
 
         //해당 포스트의 댓글 가져오기
-        Page<Comment> comments = commentRepository.findCommentByPost(post, pageable);
-        List<CommentResponse> commentResponseList = comments.stream()
-                .map(comment -> CommentResponse.fromEntity(comment)).collect(Collectors.toList());
+        Page<CommentResponse> commentResponseList = commentRepository.findCommentByPost(post, pageable)
+                .map(comment -> CommentResponse.fromEntity(comment));
 
         return commentResponseList;
     }

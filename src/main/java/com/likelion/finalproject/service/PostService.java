@@ -109,9 +109,8 @@ public class PostService {
      */
     public Page<PostGetResponse> getMyPost(Pageable pageable, String userName) {
         User user = validateService.validateUser(userName);
-        Page<Post> posts = postRepository.findPostByUser(user, pageable);
 
-        Page<PostGetResponse> postGetRespons = posts
+        Page<PostGetResponse> postGetRespons = postRepository.findPostByUser(user, pageable)
                 .map(post -> PostGetResponse.fromEntity(post));
         return postGetRespons;
     }
