@@ -15,6 +15,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithAnonymousUser;
@@ -62,7 +64,7 @@ class CommentControllerTest {
                 .postId(1L)
                 .build();
 
-        List<CommentResponse> commentResponseList = Arrays.asList(commentResponse);
+        Page<CommentResponse> commentResponseList = new PageImpl<>(Arrays.asList(commentResponse));
 
         given(commentService.getAllComment(any(), any())).willReturn(commentResponseList);
 

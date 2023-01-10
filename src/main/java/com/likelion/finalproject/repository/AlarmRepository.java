@@ -24,6 +24,6 @@ public interface AlarmRepository extends JpaRepository<Alarm, Integer> {
     void reSave(@Param("alarmId") Integer alarmId);
 
     @Query("select a from Alarm a where a.user = :user and a.deletedAt is null ")
-    List<Alarm> findAlarmByUserExceptNull(@Param("user") User user, Pageable pageable);
+    List<Alarm> findAlarmByUserExceptNull(@Param("user") User user);
 
 }

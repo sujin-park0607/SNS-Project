@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -377,7 +378,7 @@ class PostControllerTest {
                 .body("내용")
                 .userName("sujin")
                 .build();
-        List<PostGetResponse> postGetResponseList = Arrays.asList(postGetResponse);
+        Page<PostGetResponse> postGetResponseList = new PageImpl<>(Arrays.asList(postGetResponse));
         //service 정의
         given(postService.getMyPost(any(), any())).willReturn(postGetResponseList);
 

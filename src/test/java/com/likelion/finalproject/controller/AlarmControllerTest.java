@@ -45,7 +45,7 @@ class AlarmControllerTest {
     @WithMockUser
     void alarm_success() throws Exception{
 
-        String url = "/api/v1/alarms";
+        String url = "/api/v1/users/alarms";
         AlarmResponse alarmResponse = AlarmResponse.builder()
                 .id(1)
                 .alarmType("NEW_LIKE_ON_POST")
@@ -55,18 +55,17 @@ class AlarmControllerTest {
                 .build();
         List<AlarmResponse> alarmResponseList = Arrays.asList(alarmResponse);
 
-        given(alarmService.getAlarmList(any(), any())).willReturn(alarmResponseList);
+        given(alarmService.getAlarmList(any())).willReturn(alarmResponseList);
 
         mockMvc.perform(get(url)
-                        .param("sort", "id,desc")
                         .with(csrf()))
                 .andExpect(status().isOk())
                 //해당 내용이 있는지 테스트
-                .andExpect(jsonPath("$.result.content[0].id").value(alarmResponse.getId()))
-                .andExpect(jsonPath("$.result.content[0].alarmType").value(alarmResponse.getAlarmType()))
-                .andExpect(jsonPath("$.result.content[0].fromUserId").value(alarmResponse.getFromUserId()))
-                .andExpect(jsonPath("$.result.content[0].targetId").value(alarmResponse.getTargetId()))
-                .andExpect(jsonPath("$.result.content[0].text").value(alarmResponse.getText()))
+                .andExpect(jsonPath("$.result[0].id").value(alarmResponse.getId()))
+                .andExpect(jsonPath("$.result[0].alarmType").value(alarmResponse.getAlarmType()))
+                .andExpect(jsonPath("$.result[0].fromUserId").value(alarmResponse.getFromUserId()))
+                .andExpect(jsonPath("$.result[0].targetId").value(alarmResponse.getTargetId()))
+                .andExpect(jsonPath("$.result[0].text").value(alarmResponse.getText()))
                 .andDo(print());
     }
 
@@ -77,7 +76,7 @@ class AlarmControllerTest {
 
         String url = "/api/v1/alarms";
 
-        given(alarmService.getAlarmList(any(), any())).willThrow(new AppException(ErrorCode.INVALID_PERMISSION, ErrorCode.INVALID_PERMISSION.getMessage()));
+        given(alarmService.getAlarmList(any())).willThrow(new AppException(ErrorCode.INVALID_PERMISSION, ErrorCode.INVALID_PERMISSION.getMessage()));
 
         mockMvc.perform(get(url)
                         .param("sort", "id,desc")

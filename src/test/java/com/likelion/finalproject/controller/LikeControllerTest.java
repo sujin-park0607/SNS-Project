@@ -44,7 +44,7 @@ class LikeControllerTest {
     @DisplayName("좋아요 누르기 성공")
     @WithMockUser
     void like_success() throws Exception{
-        String url = "/posts/1/likes";
+        String url = "/api/v1/posts/1/likes";
 
         given(likeService.controlLike(any(), any())).willReturn("좋아요를 눌렀습니다.");
 
@@ -62,7 +62,7 @@ class LikeControllerTest {
     @DisplayName("좋아요 누르기 실패(1) - 로그인 하지 않은 경우")
     @WithAnonymousUser
     void like_fail_not_login() throws Exception{
-        String url = "/posts/1/likes";
+        String url = "/api/v1/posts/1/likes";
 
         given(likeService.controlLike(any(), any())).willThrow(new AppException(ErrorCode.INVALID_PERMISSION, ""));
 
