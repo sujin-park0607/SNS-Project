@@ -1,5 +1,6 @@
 package com.likelion.finalproject.repository;
 
+import com.likelion.finalproject.domain.dto.post.PostGetResponse;
 import com.likelion.finalproject.domain.entity.Post;
 import com.likelion.finalproject.domain.entity.User;
 import org.springframework.data.domain.Page;

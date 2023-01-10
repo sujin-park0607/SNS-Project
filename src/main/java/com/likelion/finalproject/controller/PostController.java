@@ -7,6 +7,7 @@ import com.likelion.finalproject.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.*;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,8 +34,9 @@ public class PostController {
      * 전체 게시물 조회
      */
     @GetMapping
-    public Response<Page<PostGetResponse>> list(){
-        PageRequest pageable = PageRequest.of(0,20, Sort.by("id").descending());
+    public Response<Page<PostGetResponse>> list(@PageableDefault(size = 20, sort ="id",
+            direction = Sort.Direction.DESC) Pageable pageable){
+//        PageRequest pageable = PageRequest.of(0,20, Sort.by("id").descending());
         List<PostGetResponse> postGetRespons = postService.getAllPost(pageable);
         return Response.success( new PageImpl<> (postGetRespons));
     }
@@ -75,8 +77,8 @@ public class PostController {
     public Response<Page<PostGetResponse>> getMyList(Authentication authentication){
         String userName = authentication.getName();
         PageRequest pageable = PageRequest.of(0,20, Sort.by("id").descending());
-        List<PostGetResponse> postGetRespons = postService.getMyPost(pageable, userName);
-        return Response.success( new PageImpl<> (postGetRespons));
+        Page<PostGetResponse> postGetRespons = postService.getMyPost(pageable, userName);
+        return Response.success(postGetRespons);
     }
 
 

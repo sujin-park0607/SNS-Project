@@ -29,8 +29,6 @@ import java.util.stream.Collectors;
 public class PostService {
 
     private final PostRepository postRepository;
-    private final CommentRepository commentRepository;
-    private final LikeRepository likeRepository;
     private final ValidateService validateService;
 
     /**
@@ -109,12 +107,12 @@ public class PostService {
     /**
      * 마이 피드
      */
-    public List<PostGetResponse> getMyPost(PageRequest pageable, String userName) {
+    public Page<PostGetResponse> getMyPost(Pageable pageable, String userName) {
         User user = validateService.validateUser(userName);
-        Page<Post> myPosts = postRepository.findPostByUser(user, pageable);
-        List<PostGetResponse> myPostGetResponse = myPosts.stream()
-                .map(post -> PostGetResponse.fromEntity(post)).collect(Collectors.toList());
+        Page<Post> posts = postRepository.findPostByUser(user, pageable);
 
-        return myPostGetResponse;
+        Page<PostGetResponse> postGetRespons = posts
+                .map(post -> PostGetResponse.fromEntity(post));
+        return postGetRespons;
     }
 }

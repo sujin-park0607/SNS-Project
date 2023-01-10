@@ -5,6 +5,7 @@ import com.likelion.finalproject.domain.entity.Post;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.data.domain.Page;
 
 import java.time.LocalDateTime;
 
@@ -33,4 +34,5 @@ public class PostGetResponse {
                 .lastModifiedAt(post.getLastModifiedAt())
                 .build();
     }
+
 }
