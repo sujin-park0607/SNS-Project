@@ -119,12 +119,11 @@ http://ec2-13-125-151-215.ap-northeast-2.compute.amazonaws.com:8080/swagger-ui/i
 
 ## 2주차 미션 요약
 [접근 방법]
-- 간단한 스프린트 계획서를 작성하여서 기록하며 진행하였다.
-  - https://programming-with-sujin.notion.site/SNS-4f406de47d4443e4882ed0e8abf2a265
+- 간단한 스프린트 계획서를 작성하여서 기록하며 진행하였다.(https://programming-with-sujin.notion.site/SNS-4f406de47d4443e4882ed0e8abf2a265)
 - 기존의 배웠던 내용으로 MVC 패턴을 나누어 진행하였다.
 - soft delete를 위해 @SQLDelete, @Where을 적용하여 구현하였다.
 
-  [특이 사항]
+[특이 사항]
 - user와 post를 확인하는 공통 로직이 존재했기에 따로 클래스 분리를 통해 메서드를 재활용할 수 있도록 리펙토링해주었다.(https://alcoholble.tistory.com/6)
 - post삭제 시 comment와 like 삭제를 진행할 때 두가지의 방법으로 구현할 수 있었는데 casCade를 사용하여 삭제해주었고, soft delete와 함께 사용이 가능하다는것을 배웠다.(https://alcoholble.tistory.com/12)
 - 좋아요 취소 기능을 구현하기 위해서 로직을 짰고 리펙토링이 판단하다고 생각하여 메서드분리를 통해 클린코드를 실천하도록 노력하였다.(https://alcoholble.tistory.com/14)
