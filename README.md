@@ -3,15 +3,14 @@
 
 
 ## ERD - 데이터베이스
-![image](/uploads/32a5a229a6402d623ed3e8e1a34b0e10/image.png){: width="300" height="500"}
-
+<img src="https://user-images.githubusercontent.com/75667075/212159206-c1dd27b0-d257-42da-8d46-f01070273fe1.png" width="400" height="600">
 <br>
 <br>
 
 ---
 
 ## Architecture - 아키텍처
-![image](/uploads/9986fcccd9de094a5f8a771757d327d0/image.png)
+<img src="https://user-images.githubusercontent.com/75667075/212159151-b1694f3f-666e-41cb-9dd3-5400bb467b27.png" width="100%" height="100%">
 <br>
 <br>
 
